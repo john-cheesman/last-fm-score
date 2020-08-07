@@ -1,0 +1,40 @@
+﻿@page "/"
+@inject LastFMService LastFM
+@inject ScoreService Score
+
+<h1>Rate your musical taste</h1>
+
+<input type="text" placeholder="username" @bind="username" />
+<button @onclick="GetScore">Go</button>
+
+@if (loadingScore)
+{
+    <p><em>Loading...</em></p>
+}
+
+@if (artists != null)
+{
+    <h2>@username scored: @score</h2>
+    <ol>
+        @foreach (var artist in artists)
+        {
+            <li>@artist.Name</li>
+        }
+    </ol>
+}
+
+@code {
+    private List<Artist> artists;
+    private int score;
+    private string username;
+    private bool loadingScore;
+
+    private async Task GetScore()
+    {
+        loadingScore = true;
+        Console.WriteLine($"Username: {username}");
+        artists = await LastFM.GetArtistsForUser(username);
+        score = await Score.GetScore(artists);
+        loadingScore = false;
+    }
+}
