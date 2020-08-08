@@ -12,7 +12,7 @@
     <p><em>Loading...</em></p>
 }
 
-@if (artists != null)
+@if (artists != null && !loadingScore)
 {
     <h2>@username scored: @score</h2>
     <ol>
